@@ -1,0 +1,53 @@
+{
+  "name": "nodejs-getting-started",
+  "version": "1.0.0",
+  "description": "End to end sample for running Node.js applications on Google Cloud Platform",
+  "repository": "https://github.com/GoogleCloudPlatform/nodejs-getting-started",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "e2e": "repo-tools test deploy",
+    "test": "repo-tools test app",
+    "cover": "nyc --cache npm test; nyc report --reporter=html"
+  },
+  "author": "McDuck",
+  "cloud-repo-tools": {
+    "requiresKeyFile": true,
+    "requiresProjectId": true,
+    "test": {
+      "app": {
+        "args": [
+          "app.js"
+        ],
+        "msg": "Hello, world!"
+      }
+    }
+  },
+  "license": "Apache-2.0",
+  "semistandard": {
+    "globals": [
+      "after",
+      "afterEach",
+      "before",
+      "beforeEach",
+      "describe",
+      "it"
+    ]
+  },
+  "dependencies": {
+    "@google-cloud/datastore": "^1.4.2",
+    "@google-cloud/error-reporting": "^0.5.1",
+    "@google-cloud/trace-agent": "^3.1.1",
+    "express": "4.16.2",
+    "googleapis": "^33.0.0",
+    "moment": "^2.22.2"
+  },
+  "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^2.3.3",
+    "ava": "0.25.0",
+    "supertest": "3.0.0"
+  },
+  "engines": {
+    "node": "8.x.x"
+  }
+}
