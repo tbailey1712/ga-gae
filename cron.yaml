@@ -1,0 +1,5 @@
+cron:
+- description: "Daily Data Refresh"
+  url: /api/refresh
+  schedule: every day 00:10
+  timezone: America/Chicago

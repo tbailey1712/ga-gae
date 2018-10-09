@@ -33,6 +33,7 @@
             npm install --save @google-cloud/error-reporting
             npm install --save @google-cloud/trace-agent
             npm install moment --save
+            npm install moment-timezone --save
 
     * Using Yarn:
 
@@ -57,3 +58,16 @@
         gcloud app deploy
 
 1.  View the deployed app at [https://YOUR_PROJECT_ID.appspot.com](https://YOUR_PROJECT_ID.appspot.com).
+
+# 2 - Public file hosting
+
+1.  Create a CNAME record for
+
+1.  Upload files
+    
+        Create a bucket for the domain name at gs://...
+        gsutil web set -m index.html -e 404.html gs://reports.mcducklabs.com
+        gsutil cp 404.html gs://reports.mcducklabs.com
+        gsutil cp index.html gs://reports.mcducklabs.com
+        gsutil iam ch allUsers:objectViewer gs://reports.mcducklabs.com
+

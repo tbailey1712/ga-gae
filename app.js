@@ -17,12 +17,15 @@
 const express = require('express');
 const {google} = require('googleapis');
 const ErrorReporting = require('@google-cloud/error-reporting').ErrorReporting;
-var moment = require('moment');
 
 const app = express();
 
 const errorlog = new ErrorReporting();
 
+
+
+//app.use('/books', require('./books/crud'));
+//app.use('/api/books', require('./books/api'));
 
 app.get('/', (req, res) => 
 {
@@ -44,19 +47,96 @@ app.get('/', (req, res) =>
   //res.status(200).send('Hello, world!');
 });
 
-
-function handleGET (req, res) {
-  // Do something with the GET request
+app.get('/api/refresh', (req, res) =>
+{
   var message = 'Hello McDuck! <br>'
   var project_id = "api-project-73897325473";
 
-  message = message + 'URL: ' + req.baseUrl + '<br>';
-  message = message + 'Project ID = ' + project_id + '<br>';
+  var moment = require('moment-timezone');
+  moment.tz.setDefault("America/Chicago");
+  var now = moment().format("MM/DD/YYYY HH:mm");
 
+  var yest = getYesterday();
+  var day30 = get30DayBottom();
+
+  message = message + 'Last Updated = ' + now + '<br>';
+
+  res.status(200).send(message); 
+});
+
+app.get('/api/yesterday/pageviews', (req, res) =>
+{
+  //var pageviews = getValue("Yesterday.Pageviews");
+  //console.log("/api/yesterday/pageviews: received " + JSON.stringify(pageviews));
+  //console.log("/api/yesterday/pageviews: value= " + pageviews );
+
+  res.set('Access-Control-Allow-Origin', "*")
+  res.set('Access-Control-Allow-Methods', 'GET, POST')
+
+  let pageviews = "0";
+
+  var getValuePromise = getValue("Yesterday.Pageviews");
+
+  getValuePromise.then( function(result){ 
+    console.log("/api/yesterday/pageviews: getValue returned value= " + result );
+    res.status(200).send( result );
+  }, function (error) {
+    console.log("/api/yesterday/pageviews: getValue sent an Error: " + error);
+    res.status(500).send("Error Retrieving");  
+  }); 
+  console.log("/api/yesterday/pageviews: finished ");  
+});
+
+
+app.get('/api/last30days/pageviews', (req, res) =>
+{
+  res.set('Access-Control-Allow-Origin', "*")
+  res.set('Access-Control-Allow-Methods', 'GET, POST')
+
+  var getValuePromise = getValue("Last30Days.Pageviews");
+
+  getValuePromise.then( function(result){ 
+    console.log("/api/last30days/pageviews: getValue returned value= " + result );
+    res.status(200).send( result );
+  }, function (error) {
+    console.log("/api/last30days/pageviews: getValue sent an Error: " + error);
+    res.status(500).send("Error Retrieving");  
+  }); 
+  console.log("/api/last30days/pageviews: finished ");  
+});
+
+app.get('/api/last30days/bottompages', (req, res) =>
+{
+  res.set('Access-Control-Allow-Origin', "*")
+  res.set('Access-Control-Allow-Methods', 'GET, POST')
+
+  var getValuePromise = getValue("Last30Days.BottomPages");
+
+  getValuePromise.then( function(result){ 
+    console.log("/api/last30days/bottompages: getValue returned value= " + result );
+    res.status(200).send( result );
+  }, function (error) {
+    console.log("/api/last30days/bottompages: getValue sent an Error: " + error);
+    res.status(500).send("Error Retrieving");  
+  }); 
+  console.log("/api/last30days/bottompages: finished ");  
+});
+
+
+
+app.get('/report', (req, res) =>
+{
+   res.set('Access-Control-Allow-Origin', "*")
+  res.set('Access-Control-Allow-Methods', 'GET, POST')
+   
+  res.status(200).send('your report'); 
+});
+
+
+function handleGET (req, res) {
+  // Do something with the GET request
   var q = req.query.q;
   message = message + 'Query Type q=' + q + '<br>';
-
-  writeTimestamp();
 
   switch (q) {
     case 'GA':
@@ -66,9 +146,10 @@ function handleGET (req, res) {
       message = message + 'GA query submitted';
       res.status(200).send(message);
       break;
-    case 'topic':
+    case 'report':
       console.log("handleGET: Publishing message to topic REFRESH_GA_DATA_TOPIC");
-
+      var path = require('path');
+      res.sendFile(path.join(__dirname + '/report.html'));
       break;
     default:
       console.log("handleGET: No Query Specified");
@@ -115,6 +196,8 @@ let getReports = function (reports)
 function getYesterday()
 {
   console.log("getYesterday(): Sending GA Request");
+  writeTimestamp();
+
 
   var viewID = "65651086";
   let basic_report = {
@@ -253,20 +336,19 @@ function buildJSON(pagerows, totalpv)
 function writeTimestamp()
 {
 	try {
-	//	var currentDt = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
-	 var currentDt = new Date();
-	  	var mm = currentDt.getMonth() + 1;
-	  var dd = currentDt.getDate();
-	  var yyyy = currentDt.getFullYear();
-	  var hh = currentDt.getHours();
-	  var min = currentDt.getMinutes();
-	  var date = mm + '/' + dd + '/' + yyyy + ' ' + hh + ':' + min;  
-	  storeValue("LastUpdated", date);
+
+    //var moment = require('moment');
+    var moment = require('moment-timezone');
+
+    moment.tz.setDefault("America/Chicago");
+    var now = moment().format("MM/DD/YYYY HH:mm");
+    console.log("writeTimestamp() Moment returns " + now);
+    storeValue("LastUpdated", now);
 
 	}
 	catch (ex)
 	{
-		console.error("writeTimestamp(): " + ex);
+		console.error("writeTimestamp() Error: " + ex.stack);
 	}
 
 }
@@ -312,9 +394,9 @@ async function storeValue(key, value)
 /*
     Split into a separate module
  */
-async function getValue(row)
+function getValue(row)
 {
-  console.log("getValue row=" + row);
+  console.log("getValue(" + row + ") Beginning ");
 
   const Datastore = require('@google-cloud/datastore');
   const projectId = 'api-project-73897325473';
@@ -322,21 +404,27 @@ async function getValue(row)
   const datastore = Datastore({ projectId: projectId });
 
   const kind = 'GA';
-  const gcskey = datastore.key([kind, row]);
+  const key = datastore.key([kind, row]);
 
-  return datastore.get(gcskey)
-    .then(([entity]) => {
-      // The get operation will not fail for a non-existent entity, it just
-      // returns an empty dictionary.
-      console.log("getValue(" + row + ")=" + entity );
-      if (!entity) {
-        throw new Error(`No entity found for key ${key.path.join('/')}.`);
+  return new Promise(function(resolve, reject) {
+      // Do async job
+    datastore.get(key, function(err, entity) {
+      if (err != null) 
+      {
+        console.log("getValue(" + row + ") err=" + err);
+        reject(err);
       }
-    })
-    .catch((err) => {
-      console.error(err);
-      return Promise.reject(err);
-    });  
+      else
+      {
+        console.log("getValue(" + row + ") entity=" + JSON.stringify(entity) + " value=" + entity.value);
+        resolve(entity.value);
+      }
+    });
+
+  });
+
+  
+  
 }
 
 

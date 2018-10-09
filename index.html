@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Keep Bootstrap First -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+  
+ 
+    <title>Report Index</title>
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+ 		<a class="navbar-brand" href="#">McDuck Labs Reports</a>
+      	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        	<span class="navbar-toggler-icon"></span>
+		</button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+        </ul>
+        <!--
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    	-->
+      </div>
+    </nav>
+
+    <main>
+
+		<div class="starter-template">
+			<h1>SimpleAwesomeCooking Reports</h1>
+			<p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+			<p> 
+				<button type="button" id="refresh-data" class="btn btn-info">
+					<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh Data
+				</button> 
+			</p>
+		</div>
+		<div class="starter-template container">
+      		<div class="card-deck mb-3 text-center">
+        		
+        		<div class="card mb-4 box-shadow">
+          			<div class="card-header">
+            			<h4 class="my-0 font-weight-normal">Pageviews Yesterday</h4>
+					</div>
+					<div class="card-body">
+						<h1 class="card-title pricing-card-title">
+							<span id="pvs-yesterday">0</span>
+						</h1>
+					</div>
+				</div>
+			
+
+      			<div class="card mb-4 box-shadow">
+          			<div class="card-header">
+            			<h4 class="my-0 font-weight-normal">Pageviews Last 30</h4>
+					</div>
+					<div class="card-body">
+						<h1 class="card-title pricing-card-title">
+							<span id="pvs-last30days">0</span>
+						</h1>
+					</div>
+				</div>
+				
+      			<div class="card mb-4 box-shadow">
+        	  		<div class="card-header">
+    	     	   		<h4 class="my-0 font-weight-normal">PV's Last Month</h4>
+					</div>
+					<div class="card-body">
+						<h1 class="card-title pricing-card-title">0</h1>
+					</div>
+					
+				</div>
+	
+			</div>  <!-- Deck -->			
+
+		</div> <!-- Container -->
+		<div class="container border">
+			<div>
+				<p class="lead">Top Report</p>
+			</div>
+			<table data-order='[[ 1, "asc" ]]' id="Bottom30Pages" class="display" style="width:100%" >
+    			<thead>
+        			<tr>
+            			<th>Page Title </th>
+            			<th>Views </th>
+        			</tr>
+    			</thead>
+    			<tbody>
+    			</tbody>
+			</table>	
+		</div>
+
+    </main>
+
+<!-- Finish with Bootstrap scripts -->
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js"></script>
+    <script>
+      Holder.addTheme('thumb', {
+        bg: '#55595c',
+        fg: '#eceeef',
+        text: 'Thumbnail'
+      });
+    </script>
+    
+    
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script src="utils.js"></script>
+</body>
+
+</html>
