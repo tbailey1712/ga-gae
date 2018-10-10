@@ -32,6 +32,8 @@
             npm install --save @google-cloud/datastore
             npm install --save @google-cloud/error-reporting
             npm install --save @google-cloud/trace-agent
+            npm install --save @google-cloud/debug-agent
+            npm install --save @google-cloud/profiler
             npm install moment --save
             npm install moment-timezone --save
 
